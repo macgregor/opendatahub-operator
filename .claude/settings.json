@@ -1,0 +1,16 @@
+{
+    "includeCoAuthoredBy": false,
+    "permissions": {
+      "allow": [
+        "Bash(make lint)",
+        "Bash(make fmt:*)",
+        "Bash(make unit-test:*)"
+      ],
+      "deny": [
+        "Bash(curl:*)",
+        "Read(./.env)",
+        "Read(./.env.*)",
+        "Read(./secrets/**)"
+      ]
+    }
+  }
