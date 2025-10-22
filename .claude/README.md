@@ -6,23 +6,23 @@ This directory contains configuration and helpers for working with Claude Code i
 
 Located in `.claude/commands/`, these provide quick access to common workflows:
 
-- `/test-component` - Run e2e tests for a specific component
-- `/add-component` - Guided workflow for adding a new component
 - `/review-pr` - Comprehensive PR review checklist
-- `/debug-reconcile` - Debug reconciliation issues
-- `/build-deploy` - Build and deploy operator to a cluster
-- `/fix-linting` - Fix linting issues
-- `/analyze-component` - Deep analysis of a component's implementation
-- `/update-api` - Update API and regenerate manifests
-- `/explain-error` - Get help understanding and fixing errors
+
+## Agent Skills
+
+Located in `.claude/skills/`, these provide tools for agents to use when working with the code base:
+
+- `generate-unit-tests` - 
+
+If for some reason Claude doesnt automatically use your skill for a tasks, try interrupting the task and prompting it with "What Skills are available?" and it usually connects the dots.
+
+see: https://anthropic.mintlify.app/en/docs/claude-code/skills
 
 ## Templates
 
 Located in `.claude/templates/`, these provide structured approaches for common tasks:
 
-- `component-feature.md` - Adding a feature to an existing component
-- `bugfix.md` - Fixing bugs with proper testing
-- `new-component.md` - Complete checklist for adding a new component
+- none currently
 
 ## Usage
 
@@ -31,7 +31,7 @@ Located in `.claude/templates/`, these provide structured approaches for common 
 In Claude Code, type `/` followed by the command name:
 
 ```
-/test-component
+/review-pr
 ```
 
 Claude will guide you through the workflow interactively.
@@ -65,16 +65,6 @@ For detailed information, see `CLAUDE.md` in the repository root.
 2. **Deploy to cluster**:
    ```
    /build-deploy
-   ```
-
-3. **Add a new feature**:
-   ```
-   Help me add [feature] using the component-feature template
-   ```
-
-4. **Debug issues**:
-   ```
-   /debug-reconcile
    ```
 
 ## Contributing
