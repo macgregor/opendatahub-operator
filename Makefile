@@ -108,6 +108,9 @@ ALERT_SEVERITY = critical
 OPERATOR_MAKE_ENV_FILE = local.mk
 -include $(OPERATOR_MAKE_ENV_FILE)
 
+# Include security scanning targets
+-include security.mk
+
 .PHONY: default
 default: manifests generate lint unit-test build
 
