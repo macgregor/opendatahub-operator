@@ -11,6 +11,7 @@
       "Read(.claude/agents/analyzers/*.md)",
       "Read(*.sh)",
       "Read(security.mk)",
+      "Read(Makefile)",
       "Write(.security-reports/*.sarif)",
       "Write(.security-reports/*.json)",
       "Write(.security-reports/*.md)",
@@ -19,7 +20,14 @@
       "Bash(./.claude/scripts/generate-markdown-report.sh:*)",
       "Bash(make gosec:*)",
       "Bash(make secrets-check:*)",
-      "Bash(make shellcheck:*)"
+      "Bash(make shellcheck:*)",
+      "Bash(cat .security-reports:*)",
+      "Bash(ls .security-reports:*)",
+      "Bash(test:*)",
+      "Bash(claude:*)",
+      "Glob(**/*.yaml)",
+      "Glob(**/*.yml)",
+      "Glob(**/*.go)"
     ],
     "deny": [],
     "ask": []

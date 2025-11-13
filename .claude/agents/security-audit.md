@@ -46,51 +46,43 @@ This creates a manifest with files categorized by domain (RBAC, network, CRDs, c
 
 ## Phase 1: Launch 3 Analyzers in Parallel
 
-Use the Task tool to launch ALL 3 analyzers in a SINGLE message for parallel execution:
+Use the Task tool to launch ALL 3 analyzers in a SINGLE message for parallel execution.
 
-### 1. k8s-manifest-analyzer (Haiku)
-Analyzes Kubernetes YAML for security issues:
-- RBAC wildcards and excessive permissions
-- NetworkPolicy gaps
-- Secret exposure
-- CRD validation schemas
+### Analyzer Overview:
 
-**Output:** `.security-reports/k8s-findings.sarif`
+1. **k8s-manifest-analyzer** (Haiku) - Analyzes Kubernetes YAML for RBAC wildcards, NetworkPolicy gaps, secret exposure, CRD validation
+2. **code-analyzer** (Haiku) - Analyzes Go code for command injection, path traversal, secret leaks, input validation, race conditions
+3. **static-tools-runner** (Haiku) - Orchestrates gosec, gitleaks, shellcheck and enhances output with actionable context
 
-### 2. code-analyzer (Haiku)
-Analyzes Go code for vulnerabilities:
-- Command injection
-- Path traversal
-- Secret leaks in logs/errors
-- Input validation gaps
-- Race conditions
+### Launch Procedure:
 
-**Output:** `.security-reports/code-findings.sarif`
+**CRITICAL:** You MUST read each analyzer's full instructions first, then pass the complete content to the Task tool.
 
-### 3. static-tools-runner (Haiku)
-Orchestrates static analysis tools:
-- gosec (Go security scanner)
-- gitleaks (secret scanner)
-- shellcheck (shell script linter)
+**Step 1:** Read all three analyzer instruction files:
+```
+Read(.claude/agents/analyzers/k8s-manifest-analyzer.md)
+Read(.claude/agents/analyzers/code-analyzer.md)
+Read(.claude/agents/analyzers/static-tools-runner.md)
+```
 
-Enhances tool output with actionable context (impact, remediation, effort, priority).
-
-**Output:** `.security-reports/static-findings.sarif`
-
-**Launch command:**
-
+**Step 2:** Launch all 3 agents in a SINGLE message with COMPLETE prompts:
 ```
 Task(subagent_type="general-purpose", model="haiku", description="K8s manifest analysis",
-     prompt="Follow instructions in .claude/agents/analyzers/k8s-manifest-analyzer.md exactly. Analyze ALL files in the manifest.")
+     prompt="<paste COMPLETE content of k8s-manifest-analyzer.md here>")
 
 Task(subagent_type="general-purpose", model="haiku", description="Go code analysis",
-     prompt="Follow instructions in .claude/agents/analyzers/code-analyzer.md exactly. Analyze files per the sampling strategy in the prompt.")
+     prompt="<paste COMPLETE content of code-analyzer.md here>")
 
 Task(subagent_type="general-purpose", model="haiku", description="Static tools",
-     prompt="Follow instructions in .claude/agents/analyzers/static-tools-runner.md exactly. Run all available tools and enhance their output.")
+     prompt="<paste COMPLETE content of static-tools-runner.md here>")
 ```
 
-**IMPORTANT:** Launch all 3 in a SINGLE message to run them in parallel.
+**DO NOT** use file path references like "Follow instructions in .claude/agents/analyzers/..." as prompts. The Task tool cannot read files - you must pass the full content.
+
+**Expected outputs:**
+- `.security-reports/k8s-findings.sarif`
+- `.security-reports/code-findings.sarif`
+- `.security-reports/static-findings.sarif`
 
 ## Phase 2: Merge SARIF Files (Bash Script)
 
@@ -176,11 +168,23 @@ If a bash script fails:
 - Do NOT attempt to fix by rewriting scripts
 - Do NOT continue to dependent phases
 
+## Permission Issues
+
+**IMPORTANT:** Sub-agents spawned via Task tool may not inherit permissions from .claude/settings.json automatically. If analyzers fail with permission errors:
+
+1. Check that the analyzer prompts are complete (not file path references)
+2. Verify .claude/settings.json has all necessary permissions
+3. If permission errors persist, the analyzers may need to request permission interactively
+4. Consider whether agents need explicit permission grants in their prompts
+
+**Known limitation:** The Task tool does not guarantee permission propagation to sub-agents.
+
 ## Graceful Degradation
 
 - If static tools not installed: static-tools-runner outputs empty SARIF, audit continues
 - If file categories empty: analyzer skips that category, reports 0 files analyzed
 - If all analyzers fail: Report total failure, suggest checking .security-reports/ directory
+- If permission errors occur: Report which analyzer failed and what permission was needed
 
 # COST AND PERFORMANCE
 
