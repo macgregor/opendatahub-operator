@@ -67,3 +67,7 @@ local.mk
 
 # Ignore catalog related files
 catalog/
+
+# Security scanning reports
+.security-reports/
+.claude/settings.local.json
