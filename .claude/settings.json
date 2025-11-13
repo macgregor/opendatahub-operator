@@ -1,7 +1,27 @@
 {
-    "permissions": {
-      "allow": [],
-      "deny": [],
-      "ask": []
-    }
+  "permissions": {
+    "allow": [
+      "Read(config/**/*.yaml)",
+      "Read(config/**/*.yml)",
+      "Read(internal/**/*.go)",
+      "Read(pkg/**/*.go)",
+      "Read(api/**/*.go)",
+      "Read(.security-reports/*.json)",
+      "Read(.security-reports/*.sarif)",
+      "Read(.claude/agents/analyzers/*.md)",
+      "Read(*.sh)",
+      "Read(security.mk)",
+      "Write(.security-reports/*.sarif)",
+      "Write(.security-reports/*.json)",
+      "Write(.security-reports/*.md)",
+      "Bash(./.claude/scripts/discover-security-files.sh:*)",
+      "Bash(./.claude/scripts/merge-sarif.sh:*)",
+      "Bash(./.claude/scripts/generate-markdown-report.sh:*)",
+      "Bash(make gosec:*)",
+      "Bash(make secrets-check:*)",
+      "Bash(make shellcheck:*)"
+    ],
+    "deny": [],
+    "ask": []
   }
+}

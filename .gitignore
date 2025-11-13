@@ -70,3 +70,4 @@ catalog/
 
 # Security scanning reports
 .security-reports/
+.claude/settings.local.json
