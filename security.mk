@@ -34,6 +34,15 @@ security: gosec shellcheck secrets-check ## Run all fast security checks (local 
 security-full: security scan-images snyk-check ## Run all security checks including container and dependency scans
 	@echo "Comprehensive security checks finished"
 
+.PHONY: ai-audit
+ai-audit: ## Run AI-powered security audit using Claude Code
+	@echo "Running AI security audit..."
+	@if ! command -v claude >/dev/null 2>&1; then \
+		echo "Error: claude command not found. Please install Claude Code CLI."; \
+		exit 1; \
+	fi
+	@claude /security-audit
+
 .PHONY: gosec
 gosec: $(GOSEC) $(SECURITY_OUT_DIR) ## Run gosec Go security scanner
 	@echo "Scanning Go code for security issues..."
@@ -110,6 +119,7 @@ security-help: ## Show detailed security tools help
 	@echo "  make secrets-check         - Scan for secrets/credentials in code"
 	@echo "  make scan-images           - Scan container images for vulnerabilities (requires IMG=...)"
 	@echo "  make snyk-check            - Scan dependencies with Snyk (requires SNYK_TOKEN)"
+	@echo "  make ai-audit              - Run AI-powered security audit using Claude Code"
 	@echo ""
 	@echo "Setup:"
 	@echo "  make security-install-tools - Install security tools for local dev environment (gosec, gitleaks)"
